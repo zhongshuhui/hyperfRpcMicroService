@@ -5,7 +5,7 @@
 #### 1.安装nacos服务配置中心
 
 ```
-docker run --name nacos-quick -e MODE=standalone -p 8849:8848 -d nacos/nacos-server:2.0.2
+docker run --name nacos-quick -e MODE=standalone -p 8848:8848 -d nacos/nacos-server:2.0.2
 ```
 
 
@@ -13,11 +13,16 @@ docker run --name nacos-quick -e MODE=standalone -p 8849:8848 -d nacos/nacos-ser
 #### 2.服务端：
 
 ```
-sudo docker run --name hyperf -v /workspace/skeleton:/data/project -p 9501:9501 -p 9502:9502 -it --privileged -u root --entrypoint /bin/sh hyperf/hyperf:8.0-alpine-v3.15-swoole
+#搭建hyperf运行环境
+docker run --name hyperf -v /workspace/skeleton:/data/project -p 9501:9501 -p 9502:9502 -it --privileged -u root --entrypoint /bin/sh hyperf/hyperf:8.0-alpine-v3.15-swoole
 cd /data/project
+#创建服务端项目
 composer create-project hyperf/hyperf-skeleton server_rpc
+#引入json-rpc
 composer require hyperf/json-rpc
+#引入JSON RPC 服务端组件
 composer require hyperf/rpc-server
+#引入nacos组件
 composer require hyperf/service-governance-nacos
 ```
 
@@ -100,9 +105,13 @@ php bin/hyperf.php start
 #### 3.客户端
 
 ```
+#创建客户端项目
 composer create-project hyperf/hyperf-skeleton client_rpc
-composer create-project hyperf/hyperf-skeleton server_rpc
+#引入json-rpc
+composer require hyperf/json-rpc
+#引入JSON RPC 客户端组件
 composer require hyperf/rpc-client
+#引入nacos组件
 composer require hyperf/service-governance-nacos
 ```
 
@@ -187,5 +196,20 @@ class IndexController extends AbstractController
     }
 
 }
+```
+
+##### 3.4 启动
+
+```
+#更改客户端启动端口
+config\autoload\server.php中servers.port=9502
+```
+
+```
+php bin/hyperf.php start
+```
+
+```
+访问http://宿主机IP9502
 ```
 
