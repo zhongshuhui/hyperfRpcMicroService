@@ -64,7 +64,7 @@ composer require hyperf/service-governance-nacos
     ],
 ```
 
-2.3 发布到服务中心
+##### 2.3 发布到服务中心
 
 ```
 <?php
